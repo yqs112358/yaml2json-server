@@ -5,13 +5,13 @@ A simple server, support converting yaml to json through http requests.
 
 ### Binary
 
-##### linux
+#### linux
 
 ```shell
 ./yaml2json-server --listen 0.0.0.0 --port 8080 --key 3kf7^21%P9d --sub-path "/convert"
 ```
 
-##### windows
+#### windows
 
 ```shell
 yaml2json-server.exe --listen 0.0.0.0 --port 8080 --key 3kf7^21%P9d --sub-path "/convert"
@@ -42,13 +42,17 @@ services:
 
 Convert the YAML plain text in POST request body to JSON.
 
-##### Example
+#### Example
 
-```shell
-curl -X POST https://<YOUR-SERVER-ADDRESS>/convert -d $'key1: 1234\nkey2:\n  nestedKey: "data"'
+Make a POST request to `https://<YOUR-SERVER-ADDRESS>/convert` with Body:
+
+```yaml
+key1: 1234
+key2:
+  nestedKey: "data"
 ```
 
-##### Response:
+Response:
 
 ```json
 {
@@ -61,17 +65,17 @@ curl -X POST https://<YOUR-SERVER-ADDRESS>/convert -d $'key1: 1234\nkey2:\n  nes
 
 ### YAML from given URL
 
-Read YAML text from the given encoded URL, then convert to JSON.
+Read YAML text from the given URL-encoded URL, then convert to JSON.
 
-> For example, convert from https://another-domain/dir/data.yaml
+#### Example
 
-##### Example:
+Make a GET request to
 
 ```shell
-curl https://<YOUR-SERVER-ADDRESS>/convert?url=https%3A%2F%2Fanother-domain%2Fdir%2Fdata.yaml
+https://<YOUR-SERVER-ADDRESS>/convert?url=https%3A%2F%2Fanother-domain%2Fdir%2Fdata.yaml
 ```
 
-##### Response:
+Response:
 
 ```json
 {
@@ -86,13 +90,13 @@ curl https://<YOUR-SERVER-ADDRESS>/convert?url=https%3A%2F%2Fanother-domain%2Fdi
 
 Pre-shared auth key set in the configuration to avoid http-api abuse. Use one of the following methods to carry the key with request:
 
-##### URL paramater
+#### URL paramater
 
 ```shell
 curl https://<YOUR-SERVER-ADDRESS>/convert?key=<YOUR-AUTH-KEY>& ......
 ```
 
-##### HTTP Basic Auth
+#### HTTP Basic Auth
 
 ```shell
 AUTH_DATA=$(echo -n ":<YOUR-AUTH-KEY>" | base64)
@@ -101,12 +105,12 @@ curl -H "Authorization: Basic $AUTH_DATA" https://<YOUR-SERVER-ADDRESS>/convert 
 
 ## Configurations
 
-| Command-line Arg | Environment Var   | Default Value | Description |
-| ---------------- | ----------------- | ------------- | ----------- |
-| `--listen`       | Y2JS_LISTEN_ADDR  | "0.0.0.0"     |             |
-| `--port`         | Y2JS_LISTEN_PORT  | 8080          |             |
-| `--key`          | Y2JS_AUTH_KEY     | ""            |             |
-| `--sub-path`     | Y2JS_URL_SUB_PATH | "/"           |             |
+| Command-line Arg | Environment Var   | Default Value | Description         |
+| ---------------- | ----------------- | ------------- | ------------------- |
+| `--listen`       | Y2JS_LISTEN_ADDR  | "0.0.0.0"     | HTTP listen address |
+| `--port`         | Y2JS_LISTEN_PORT  | 8080          | HTTP listen port    |
+| `--key`          | Y2JS_AUTH_KEY     | ""            | HTTP-API auth key   |
+| `--sub-path`     | Y2JS_URL_SUB_PATH | "/"           | HTTP Serve sub-path |
 
 ## Build
 

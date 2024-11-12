@@ -54,7 +54,7 @@ func parseConfigs() {
 	showVersion := false
 	flag.StringVar(&listenAddr, "listen", listenAddr, "HTTP listen address")
 	flag.IntVar(&listenPort, "port", listenPort, "HTTP listen port")
-	flag.StringVar(&authKey, "key", authKey, "Pre-shared auth key")
+	flag.StringVar(&authKey, "key", authKey, "HTTP-API auth key")
 	flag.StringVar(&urlSubPath, "sub-path", urlSubPath, "HTTP Serve sub-path")
 	flag.BoolVar(&showVersion, "version", false, "Print the version and exit")
 	flag.Parse()
