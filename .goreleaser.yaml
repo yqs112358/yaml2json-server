@@ -1,0 +1,74 @@
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+    - go generate ./...
+
+builds:
+  - id: yaml2json-server
+    binary: yaml2json-server
+    main: ./main.go
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - "-trimpath"
+    ldflags:
+      - "-s -w -X main.Version={{.Version}}"
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - 386
+      - amd64
+      - arm64
+
+kos:
+  - id: dockerhub
+    build: yaml2json-server
+    main: .
+    base_image: alpine
+    flags:
+      - "-trimpath"
+    ldflags:
+      - "-s -w -X main.Version={{.Version}}"
+    platforms:
+      - all
+    repository: yqs112358/yaml2json-server
+    tags:
+      - '{{ .Tag }}'
+      - '{{ .FullCommit }}'
+      - "{{if not .Prerelease}}stable{{end}}"
+      - latest
+    bare: true
+    preserve_import_paths: false
+    base_import_paths: false
+
+archives:
+  - id: with-version
+    format: tar.gz
+    # this name template makes the OS and Arch compatible with the results of `uname`.
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    # use zip for windows archives
+    format_overrides:
+      - goos: windows
+        format: zip
+
+checksum:
+  name_template: 'checksums.txt'
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
