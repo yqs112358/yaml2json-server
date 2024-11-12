@@ -24,7 +24,7 @@ docker-compose.yml
 ```yaml
 services:
   yaml2json-server:
-  	container_name: yaml2json-server
+    container_name: "yaml2json-server"
     image: "yqs112358/yaml2json-server"
     restart: unless-stopped
     environment:
